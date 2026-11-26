@@ -1,0 +1,30 @@
+{
+  "about": "endless midi, version 6: steps of the stock sequencer endless recorded from a MIDI keyboard at the pitches played, over its whole range. While the unit's shift is held on endless's screen (the synth's sequencer switched on, endless the sequencer picked, not latched), each MIDI note is handed to the unit as the press of a spare note key, and for as long as that key is held the pack answers endless's own recorder with the note's real pitch in place of the key's. What is recorded is an ordinary endless sequence. Three places of OS 1.7.3+0: the first instruction of the firmware's MIDI note-on and note-off functions and of its key-to-semitone function, each a jump with a trampoline (profile.json). One line in the log at the start and a line of counts after notes were recorded. OS 1.7.3+0 under open-field 0.12 or later only.",
+  "name": "endless midi",
+  "version": 6,
+  "interface": 1,
+  "build": "endless_midi",
+  "sources": [
+    "examples/endless_midi/endless_midi.cpp",
+    "examples/endless_midi/endless_midi_stubs.s",
+    "examples/endless_midi/endless_midi_card.s",
+    "examples/endless_midi/endless_midi_table.s"
+  ],
+  "works_with": [],
+  "serves": [],
+  "exports": [],
+  "pictures": [],
+  "card": {
+    "level": 5,
+    "frame": "endless_midi_frame",
+    "pick": null,
+    "pictures": false,
+    "input": "endless_midi_input",
+    "folders": [],
+    "asks": []
+  },
+  "marks": [],
+  "named": true,
+  "sum": true,
+  "path": null
+}

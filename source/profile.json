@@ -1,0 +1,72 @@
+{
+ "schema": 2,
+ "id": "op1f-1.7.3-endless-midi-4",
+ "device": "OP-1 Field",
+ "firmware_version": "1.7.3+0",
+ "cpu": "bf703",
+ "about": [
+  "The three places where the pack `endless midi` (versions 3, 4 and 5: the same places) changes OS 1.7.3+0 of the OP-1 Field. No byte of the firmware is in this file: addresses and checksums only.",
+  "Each is the first eight bytes of a function (whole instructions, none of them relative to its own place), taken with the form `jump` and a room of sixteen bytes: the loader copies the eight bytes into the room with a jump back behind them. The sums were worked out by the owner from their own os.ldr (SHA-256 d134eb1a...)."
+ ],
+ "stock_sha256": "d134eb1ac7ad88e8370d988329cd5d7419f016005b1d269034f9cf7166fad0ec",
+ "stock_bytes": 2079016,
+ "module_base": "0x8d2e4234",
+ "reserved_bytes": 2097152,
+ "patches": [
+  {
+   "address": "0x8f00875c",
+   "length": 8,
+   "sum": "0x04a09ea1",
+   "group": "endless midi",
+   "name": "The first instructions of the firmware's MIDI note-on function: called with the message (status, note, velocity; its flags behind) for every note-on that passed the channel filter."
+  },
+  {
+   "address": "0x8f00866c",
+   "length": 8,
+   "sum": "0x54b9c93e",
+   "group": "endless midi",
+   "name": "The first instructions of the firmware's MIDI note-off function: called with the message for every note-off, and by the note-on function for a note-on of velocity 0."
+  },
+  {
+   "address": "0x8fc9f9e4",
+   "length": 8,
+   "sum": "0x338eb4e9",
+   "group": "endless midi",
+   "name": "The first instructions of the function that turns a note key's number into its semitone (0 to 23, F first)."
+  }
+ ],
+ "image": [],
+ "tables": [
+  {
+   "file": "examples/endless_midi/endless_midi_table.s",
+   "part": "endless midi",
+   "symbol": "op1f_boot_table",
+   "entries": [
+    {
+     "address": "0x8f00875c",
+     "form": "jump",
+     "target": "endless_midi_on",
+     "room": "endless_midi_on_room",
+     "copies": 8,
+     "does": "Ours asks its own function whether this note-on is one to hand to the unit as a key press (shift held on endless's screen, synth); if so it posts the key press and returns to the caller, else it puts the registers back and jumps to its room, where the firmware's function goes on as it always did."
+    },
+    {
+     "address": "0x8f00866c",
+     "form": "jump",
+     "target": "endless_midi_off",
+     "room": "endless_midi_off_room",
+     "copies": 8,
+     "does": "Ours asks its own function whether this note-off ends a note it handed on as a key press; if so it posts that key's release and returns to the caller, else it puts the registers back and jumps to its room."
+    },
+    {
+     "address": "0x8fc9f9e4",
+     "form": "jump",
+     "target": "endless_midi_semi",
+     "room": "endless_midi_semi_room",
+     "copies": 8,
+     "does": "Ours asks its own function, with the key and the address of the caller, whether the key is one it lent to a MIDI note and the caller is endless's own recorder; if so it answers the note's real semitone, else it puts the registers back and jumps to its room."
+    }
+   ]
+  }
+ ]
+}
